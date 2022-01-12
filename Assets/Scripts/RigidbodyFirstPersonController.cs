@@ -1,26 +1,25 @@
 using System;
 using UnityEngine;
-
+using Random = UnityEngine.Random;
 namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (Rigidbody))]
     [RequireComponent(typeof (CapsuleCollider))]
     public class RigidbodyFirstPersonController : MonoBehaviour
     {
+      
+        public AudioSource[] soundFX;
         [Serializable]
         public class MovementSettings
         {
-            public float ForwardSpeed = 8.0f;   // Speed when walking forward
-            public float BackwardSpeed = 4.0f;  // Speed when walking backwards
-            public float StrafeSpeed = 4.0f;    // Speed when walking sideways
-            public float SpeedInAir = 8.0f;   // Speed when onair
+            public float ForwardSpeed = 8.0f;   //Zmienne prêdkoœci
+            public float BackwardSpeed = 4.0f;  
+            public float StrafeSpeed = 4.0f;   
+            public float SpeedInAir = 8.0f; 
             public float JumpForce = 5f;
+           
 
             [HideInInspector] public float CurrentTargetSpeed = 8f;
-            
-#if !MOBILE_INPUT
-            private bool m_Running;
-#endif
 
             public void UpdateDesiredTargetSpeed(Vector2 input)
             {
@@ -81,7 +80,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void Awake()
         {
-            
             canrotate = true;
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
@@ -143,23 +141,27 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 if (Input.GetAxisRaw("Vertical") > 0.3f)
                 {
+                 
                     m_RigidBody.AddRelativeForce(0, 0, Time.deltaTime * 1000f * movementSettings.ForwardSpeed * Mathf.Abs(inputVector.z));
                 }
                 if (Input.GetAxisRaw("Vertical") < -0.3f)
                 {
+
                     m_RigidBody.AddRelativeForce(0, 0, Time.deltaTime * 1000f * -movementSettings.BackwardSpeed * Mathf.Abs(inputVector.z));
                 }
                 if (Input.GetAxisRaw("Horizontal") > 0.5f)
                 {
+                  
                     m_RigidBody.AddRelativeForce(Time.deltaTime * 1000f * movementSettings.StrafeSpeed * Mathf.Abs(inputVector.x), 0, 0);
                 }
                 if (Input.GetAxisRaw("Horizontal") < -0.5f)
                 {
+                  
                     m_RigidBody.AddRelativeForce(Time.deltaTime * 1000f * -movementSettings.StrafeSpeed * Mathf.Abs(inputVector.x), 0, 0);
                 }
 
             }
-            //inair
+            //w powietrzu
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && !m_IsGrounded  && !Wallrunning)
             {
                 if (Input.GetAxisRaw("Vertical") > 0.3f)
@@ -183,9 +185,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
      
         }
-
         public void NormalJump()
         {
+            soundFX[Random.Range(0,4)].Play();//DŸwiêk skoku ró¿ny
             m_RigidBody.velocity = new Vector3(m_RigidBody.velocity.x, 0f, m_RigidBody.velocity.z);
             m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
         }

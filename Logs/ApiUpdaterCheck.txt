@@ -1,20 +1,30 @@
-[api-updater (non-obsolete-error-filter)] 09.01.2022 15:58:31 : Starting C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 12.01.2022 19:00:50 : Starting C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
 [api-updater (non-obsolete-error-filter)] 
 ----------------------------------
-jit/startup time      : 751,8048ms
-moved types parse time: 56ms
+jit/startup time      : 765,2623ms
+moved types parse time: 58ms
 candidates parse time : 1ms
-C# parse time         : 606ms
-candidates check time : 32ms
+C# parse time         : 670ms
+candidates check time : 59ms
 console write time    : 0ms
 
-[api-updater (non-obsolete-error-filter)] 09.01.2022 16:20:09 : Starting C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 12.01.2022 19:20:24 : Starting C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
 [api-updater (non-obsolete-error-filter)] 
 ----------------------------------
-jit/startup time      : 73,0161ms
-moved types parse time: 59ms
+jit/startup time      : 78,0179ms
+moved types parse time: 55ms
 candidates parse time : 1ms
-C# parse time         : 221ms
-candidates check time : 33ms
+C# parse time         : 237ms
+candidates check time : 49ms
+console write time    : 0ms
+
+[api-updater (non-obsolete-error-filter)] 12.01.2022 19:37:09 : Starting C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 69,0153ms
+moved types parse time: 54ms
+candidates parse time : 1ms
+C# parse time         : 231ms
+candidates check time : 49ms
 console write time    : 0ms
 

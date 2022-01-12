@@ -47,6 +47,7 @@ public class DetectObs : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
             SceneManager.LoadScene("MainMenu");
+       
         }
         if (Object == null || !colnow.enabled)
         {
