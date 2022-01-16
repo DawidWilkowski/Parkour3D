@@ -31,13 +31,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				}
 				if (input.y < 0)
 				{
-					//backwards
+					//do ty³u
 					CurrentTargetSpeed = BackwardSpeed;
 				}
 				if (input.y > 0)
 				{
-					//forwards
-					//handled last as if strafing and moving forward at the same time forwards speed should take precedence
+					//do przodu
 					CurrentTargetSpeed = ForwardSpeed;
 				}
 
@@ -92,7 +91,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             relativevelocity = transform.InverseTransformDirection(m_RigidBody.velocity);
             if (m_IsGrounded)
             {
-
+                //skok
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     NormalJump();
@@ -136,7 +135,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             Vector3 inputVector = new Vector3(h, 0, v);
             inputVector = Vector3.ClampMagnitude(inputVector, 1);
 
-            //grounded
+            //predkosc na ziemi
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && m_IsGrounded && !Wallrunning)
             {
                 if (Input.GetAxisRaw("Vertical") > 0.3f)
@@ -161,7 +160,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
 
             }
-            //w powietrzu
+            //predkosc w powietrzu
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && !m_IsGrounded  && !Wallrunning)
             {
                 if (Input.GetAxisRaw("Vertical") > 0.3f)
@@ -187,15 +186,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
         public void NormalJump()
         {
-            soundFX[Random.Range(0,4)].Play();//DŸwiêk skoku ró¿ny
+            soundFX[Random.Range(0,7)].Play();//DŸwiêk skoku ró¿ny
             m_RigidBody.velocity = new Vector3(m_RigidBody.velocity.x, 0f, m_RigidBody.velocity.z);
             m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
         }
-        public void SwitchDirectionJump()
-        {
-            m_RigidBody.velocity = transform.forward * m_RigidBody.velocity.magnitude;
-            m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
-        }
+
   
 
       
@@ -216,10 +211,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void RotateView()
         {
-            //avoids the mouse looking if the game is effectively paused
+            //jeœli gra zapauzowana to wy³¹cza myszke
             if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
 
-            // get the rotation before it's changed
+            // ustawienie myszki zprzed pauzy
             float oldYRotation = transform.eulerAngles.y;
 
             mouseLook.LookRotation (transform, cam.transform);
@@ -228,7 +223,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
 
-        /// sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom
+        /// sprawdzenie czy na ziemi
         private void GroundCheck()
         {
           if(detectGround.Obstruction)

@@ -16,7 +16,7 @@ public class DetectObs : MonoBehaviour
             {
                 if (col.GetComponent<CustomTag>().IsEnabled)
                 {
-                    if (col != null && !col.isTrigger && col.GetComponent<CustomTag>().HasTag(ObjectTagName)) // checks if the object has the right tag
+                    if (col != null && !col.isTrigger && col.GetComponent<CustomTag>().HasTag(ObjectTagName)) //sprawdzenie tagu
                     {
                         Obstruction = true;
                         Object = col.gameObject;
@@ -46,9 +46,11 @@ public class DetectObs : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Escape))
         {
+            //Time.timeScale = 0;
             SceneManager.LoadScene("MainMenu");
        
         }
+        
         if (Object == null || !colnow.enabled)
         {
             Obstruction = false;
@@ -62,8 +64,7 @@ public class DetectObs : MonoBehaviour
         }
     }
 
-
-
+   
 
 
 

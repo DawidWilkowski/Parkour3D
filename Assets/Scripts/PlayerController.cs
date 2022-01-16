@@ -7,14 +7,14 @@ public class PlayerController : MonoBehaviour
     public float drag_grounded;
     public float drag_inair;
 
-    public DetectObs detectVaultObject; //checks for vault object
-    public DetectObs detectVaultObstruction; //checks if theres somthing in front of the object e.g walls that will not allow the player to vault
-    public DetectObs detectClimbObject; //checks for climb object
-    public DetectObs detectClimbObstruction; //checks if theres somthing in front of the object e.g walls that will not allow the player to climb
+    public DetectObs detectVaultObject; //obiekt do przeskoczenia 
+    public DetectObs detectVaultObstruction; //czy da się przeskoczyć
+    public DetectObs detectClimbObject; //obiekt do wspięcia się
+    public DetectObs detectClimbObstruction; //czy da się wspiąć
 
 
-    public DetectObs DetectWallL; //detects for a wall on the left
-    public DetectObs DetectWallR; //detects for a wall on the right
+    public DetectObs DetectWallL; //ściana lewo
+    public DetectObs DetectWallR; //ściana prawo
 
     public Animator cameraAnimator;
 
@@ -29,25 +29,26 @@ public class PlayerController : MonoBehaviour
     public bool WallRunning;
     public bool WallrunningLeft;
     public bool WallrunningRight;
-    private bool canwallrun; // ensure that player can only wallrun once before needing to hit the ground again, can be modified for double wallruns
+    private bool canwallrun; // pojedynczy wallrun
     
     public bool IsParkour;
     private float t_parkour;
     private float chosenParkourMoveTime;
 
     private bool CanVault;
-    public float VaultTime; //how long the vault takes
+    public float VaultTime; 
     public Transform VaultEndPoint;
 
     private bool CanClimb;
-    public float ClimbTime; //how long the vault takes
+    public float ClimbTime; 
     public Transform ClimbEndPoint;
 
     private RigidbodyFirstPersonController rbfps;
     private Rigidbody rb;
-    private Vector3 RecordedMoveToPosition; //the position of the vault end point in world space to move the player to
-    private Vector3 RecordedStartPosition; // position of player right before vault
-    // Start is called before the first frame update
+    private Vector3 RecordedMoveToPosition; //po przeskoczeniu
+    private Vector3 RecordedStartPosition; // pozycja gracza przed przeskoczeniem
+
+    
     void Start()
     {
         rbfps = GetComponent<RigidbodyFirstPersonController>();
@@ -71,18 +72,18 @@ public class PlayerController : MonoBehaviour
             rb.drag = drag_wallrun;
 
         }
-        //vault
+        //warunek sprawdzający czy może przeskoczyć obiekt
         if (detectVaultObject.Obstruction && !detectVaultObstruction.Obstruction && !CanVault && !IsParkour && !WallRunning
             && (Input.GetKey(KeyCode.Space) || !rbfps.Grounded) && Input.GetAxisRaw("Vertical") > 0f)
-        // if detects a vault object and there is no wall in front then player can pressing space or in air and pressing forward
         {
             CanVault = true;
         }
 
+
         if (CanVault)
         {
-            CanVault = false; // so this is only called once
-            rb.isKinematic = true; //ensure physics do not interrupt the vault
+            CanVault = false; 
+            rb.isKinematic = true; 
             RecordedMoveToPosition = VaultEndPoint.position;
             RecordedStartPosition = transform.position;
             IsParkour = true;
@@ -91,7 +92,7 @@ public class PlayerController : MonoBehaviour
             cameraAnimator.CrossFade("Vault",0.1f);
         }
 
-        //climb
+        //warunek na wspinanie
         if (detectClimbObject.Obstruction && !detectClimbObstruction.Obstruction && !CanClimb && !IsParkour && !WallRunning
             && (Input.GetKey(KeyCode.Space) || !rbfps.Grounded) && Input.GetAxisRaw("Vertical") > 0f)
         {
@@ -100,13 +101,12 @@ public class PlayerController : MonoBehaviour
 
         if (CanClimb)
         {
-            CanClimb = false; // so this is only called once
-            rb.isKinematic = true; //ensure physics do not interrupt the vault
+            CanClimb = false;
+            rb.isKinematic = true;
             RecordedMoveToPosition = ClimbEndPoint.position;
             RecordedStartPosition = transform.position;
             IsParkour = true;
             chosenParkourMoveTime = ClimbTime;
-
             cameraAnimator.CrossFade("Climb",0.1f);
         }
 
@@ -128,25 +128,27 @@ public class PlayerController : MonoBehaviour
 
 
         //Wallrun
-        if (DetectWallL.Obstruction && !rbfps.Grounded && !IsParkour && canwallrun) // if detect wall on the left and is not on the ground and not doing parkour(climb/vault)
+        // jeśli wykryto ściane po lewej, nie jest na ziemi ani podczas parkour (wspinanie/przeskok)
+        if (DetectWallL.Obstruction && !rbfps.Grounded && !IsParkour && canwallrun) 
         {
             WallrunningLeft = true;
             canwallrun = false;
-            upforce = WallRunUpForce; //refer to line 186
+            upforce = WallRunUpForce;
         }
 
-        if (DetectWallR.Obstruction && !rbfps.Grounded && !IsParkour && canwallrun) // if detect wall on thr right and is not on the ground
+        if (DetectWallR.Obstruction && !rbfps.Grounded && !IsParkour && canwallrun)
         {
             WallrunningRight = true;
             canwallrun = false;
             upforce = WallRunUpForce;
         }
-        if (WallrunningLeft && !DetectWallL.Obstruction || Input.GetAxisRaw("Vertical") <= 0f || rbfps.relativevelocity.magnitude < 1f) // if there is no wall on the lef tor pressing forward or forward speed < 1 (refer to fpscontroller script)
+        // jeśli skończy się ściana lub puszczony w zostanie to koniec wallrun
+        if (WallrunningLeft && !DetectWallL.Obstruction || Input.GetAxisRaw("Vertical") <= 0f || rbfps.relativevelocity.magnitude < 1f)
         {
             WallrunningLeft = false;
             WallrunningRight = false;
         }
-        if (WallrunningRight && !DetectWallR.Obstruction || Input.GetAxisRaw("Vertical") <= 0f || rbfps.relativevelocity.magnitude < 1f) // same as above
+        if (WallrunningRight && !DetectWallR.Obstruction || Input.GetAxisRaw("Vertical") <= 0f || rbfps.relativevelocity.magnitude < 1f)
         {
             WallrunningLeft = false;
             WallrunningRight = false;
@@ -155,7 +157,7 @@ public class PlayerController : MonoBehaviour
         if (WallrunningLeft || WallrunningRight) 
         {
             WallRunning = true;
-            rbfps.Wallrunning = true; // this stops the playermovement (refer to fpscontroller script)
+            rbfps.Wallrunning = true;
         }
         else
         {
@@ -163,9 +165,10 @@ public class PlayerController : MonoBehaviour
             rbfps.Wallrunning = false;
         }
 
+        //Animacja podczas wallrun
         if (WallrunningLeft)
         {     
-            cameraAnimator.SetBool("WallLeft", true); //Wallrun camera tilt
+            cameraAnimator.SetBool("WallLeft", true); 
         }
         else
         {
@@ -183,12 +186,12 @@ public class PlayerController : MonoBehaviour
         if (WallRunning)
         {
             
-            rb.velocity = new Vector3(rb.velocity.x, upforce ,rb.velocity.z); //set the y velocity while wallrunning
-            upforce -= WallRunUpForce_DecreaseRate * Time.deltaTime; //so the player will have a curve like wallrun, upforce from line 136
-
+            rb.velocity = new Vector3(rb.velocity.x, upforce ,rb.velocity.z); 
+            upforce -= WallRunUpForce_DecreaseRate * Time.deltaTime; 
+            //walljump podczas wallruna
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                rb.velocity = transform.forward * WallJumpForwardVelocity + transform.up * WallJumpUpVelocity; //walljump
+                rb.velocity = transform.forward * WallJumpForwardVelocity + transform.up * WallJumpUpVelocity;
                 WallrunningLeft = false;
                 WallrunningRight = false;
             }
